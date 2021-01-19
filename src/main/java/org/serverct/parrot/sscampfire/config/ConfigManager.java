@@ -26,6 +26,8 @@ public class ConfigManager extends PConfig {
     private final List<String> sentences = new ArrayList<>();
     @Load(path = "Regen")
     private String range;
+    @Load(path = "MaxRegen")
+    private double maxRegen;
     @Load(path = "Distance")
     private double radius;
     @Load(path = "Cycle")
@@ -126,7 +128,7 @@ public class ConfigManager extends PConfig {
 
     public double getRadius() {
         if (radius <= 0) {
-            return 3.0D; // 这是默认值
+            return 4.0D; // 这是默认值
         }
         return radius;
     }
@@ -136,5 +138,12 @@ public class ConfigManager extends PConfig {
             return 2.5D;
         }
         return cycle;
+    }
+
+    public double getMaxRegen() {
+        if (maxRegen <= 0) {
+            return 0.7D;
+        }
+        return Math.min(maxRegen, 1.0D);
     }
 }

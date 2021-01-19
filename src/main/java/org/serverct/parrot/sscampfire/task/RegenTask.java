@@ -8,6 +8,7 @@ import org.bukkit.block.data.type.Campfire;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.serverct.parrot.parrotx.PPlugin;
+import org.serverct.parrot.parrotx.utils.BasicUtil;
 import org.serverct.parrot.sscampfire.config.ConfigManager;
 import org.serverct.parrot.sscampfire.utils.MessageUtil;
 
@@ -43,59 +44,58 @@ public class RegenTask extends BukkitRunnable {
             }
 
             for (Player user : Bukkit.getOnlinePlayers()) {
-                if (user.isDead()) {
+                if (user.isDead() || campfire.distance(user.getLocation()) > radius) {
                     continue;
                 }
 
-                if (campfire.distance(user.getLocation()) <= radius) {
-                    final UUID uuid = user.getUniqueId();
-                    final double currentHealth = user.getHealth();
-                    double maxHealth;
+                final UUID uuid = user.getUniqueId();
+                final double currentHealth = user.getHealth();
+                double maxHealth;
 
-                    final AttributeInstance maxHealthAttr = user.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-                    if (Objects.isNull(maxHealthAttr)) {
-                        maxHealth = 20.0D;
-                    } else {
-                        maxHealth = maxHealthAttr.getValue();
-                    }
+                final AttributeInstance maxHealthAttr = user.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+                if (Objects.isNull(maxHealthAttr)) {
+                    maxHealth = 20.0D;
+                } else {
+                    maxHealth = maxHealthAttr.getValue();
+                }
+                final double limitedHealth = BasicUtil.roundToDouble(maxHealth * config.getMaxRegen());
 
-                    if (currentHealth >= maxHealth || this.cooldownMap.getOrDefault(uuid, false)) {
-                        continue;
-                    }
-                    final long cooldown = BigDecimal.valueOf(config.getCooldown() * 20L).longValue();
+                if (currentHealth >= limitedHealth || this.cooldownMap.getOrDefault(uuid, false)) {
+                    continue;
+                }
+                final long cooldown = BigDecimal.valueOf(config.getCooldown() * 20L).longValue();
 
-                    final double afterRegen = currentHealth + config.getRandomRegen(this.random);
-                    if (afterRegen >= maxHealth) {
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                MessageUtil.leaveArea(uuid, campfire);
-                            }
-                        }.runTaskLaterAsynchronously(plugin, cooldown);
-                    }
-
-                    user.setHealth(Math.min(afterRegen, maxHealth));
-                    this.cooldownMap.put(uuid, true);
+                final double afterRegen = currentHealth + config.getRandomRegen(this.random);
+                if (afterRegen >= limitedHealth) {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            cooldownMap.put(uuid, false);
+                            MessageUtil.leaveArea(uuid, campfire);
                         }
                     }.runTaskLaterAsynchronously(plugin, cooldown);
-
-                    if (MessageUtil.shouldMessage(uuid, campfire)) {
-                        final String message = config.getRandomSentence(this.random);
-                        if (Objects.nonNull(message)) {
-                            plugin.getLang().sender.infoMessage(user, message);
-                        }
-                    }
-
-                    final World campfireWorld = campfire.getWorld();
-                    if (Objects.nonNull(campfireWorld)) {
-                        campfireWorld.spawnParticle(Particle.VILLAGER_HAPPY, campfire, 10, 0.5, 0.5, 0.5);
-                    }
-                    user.getWorld().spawnParticle(Particle.HEART, user.getLocation(), 10, 0.5, 0.5, 0.5);
                 }
+
+                user.setHealth(Math.min(afterRegen, maxHealth));
+                this.cooldownMap.put(uuid, true);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        cooldownMap.put(uuid, false);
+                    }
+                }.runTaskLaterAsynchronously(plugin, cooldown);
+
+                if (MessageUtil.shouldMessage(uuid, campfire)) {
+                    final String message = config.getRandomSentence(this.random);
+                    if (Objects.nonNull(message)) {
+                        plugin.getLang().sender.infoMessage(user, message);
+                    }
+                }
+
+                final World campfireWorld = campfire.getWorld();
+                if (Objects.nonNull(campfireWorld)) {
+                    campfireWorld.spawnParticle(Particle.VILLAGER_HAPPY, campfire, 10, 0.5, 0.5, 0.5);
+                }
+                user.getWorld().spawnParticle(Particle.HEART, user.getLocation(), 10, 0.5, 0.5, 0.5);
             }
         }
     }

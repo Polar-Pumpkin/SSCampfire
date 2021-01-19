@@ -4,7 +4,10 @@ bStats: false
 
 Settings:
   # 被篝火治疗的范围, 应该是半径
-  Distance: 3
+  Distance: 4
+  # 被篝火治疗的生命值上限比例
+  # 例如 0.8 是最高能被治疗到最大生命值的 80%
+  MaxRegen: 0.7
   # 被篝火治疗的血量
   Regen: "1~3"
   # 每隔多少秒回一次血
