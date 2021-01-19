@@ -1,0 +1,5 @@
+Plugin:
+  Prefix: "&9&lSSCampfire"
+  INFO: "&a>> "
+  WARN: "&e>> "
+  ERROR: "&c>> "

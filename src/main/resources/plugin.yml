@@ -1,0 +1,6 @@
+name: SSCampfire
+version: ${project.version}
+main: org.serverct.parrot.sscampfire.SSCampfire
+api-version: 1.16
+authors: [ Mical, EntityParrot_ ]
+softdepend: [ ParrotX ]
