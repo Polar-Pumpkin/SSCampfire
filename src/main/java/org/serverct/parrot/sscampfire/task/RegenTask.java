@@ -29,25 +29,27 @@ public class RegenTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        final double radius = config.getRadius();
+        double radius = config.getRadius();
         final List<Location> campfires = new ArrayList<>(config.getCampfires());
 
         for (Location campfire : campfires) {
             final Block block = campfire.getBlock();
-            if (!Material.CAMPFIRE.equals(block.getType())) {
+            if (!Material.CAMPFIRE.equals(block.getType()) || Objects.isNull(campfire.getWorld())) {
                 config.deleteCampfire(campfire);
                 continue;
             }
             Campfire data = (Campfire) block.getBlockData();
-            if (data.isWaterlogged()) {
+            if (data.isWaterlogged() || !data.isLit()) {
                 continue;
+            }
+            if (data.isSignalFire()) {
+                radius = BasicUtil.roundToDouble(radius * 1.5D);
             }
 
             for (Player user : Bukkit.getOnlinePlayers()) {
-                if (user.isDead() || campfire.distance(user.getLocation()) > radius) {
+                if (user.isDead() || !user.getWorld().equals(campfire.getWorld()) || campfire.distance(user.getLocation()) > radius) {
                     continue;
                 }
-
                 final UUID uuid = user.getUniqueId();
                 final double currentHealth = user.getHealth();
                 double maxHealth;
@@ -95,7 +97,8 @@ public class RegenTask extends BukkitRunnable {
                 if (Objects.nonNull(campfireWorld)) {
                     campfireWorld.spawnParticle(Particle.VILLAGER_HAPPY, campfire, 10, 0.5, 0.5, 0.5);
                 }
-                user.getWorld().spawnParticle(Particle.HEART, user.getLocation(), 10, 0.5, 0.5, 0.5);
+                user.getWorld().spawnParticle(Particle.HEART, user.getLocation().clone().add(0, 0.7D, 0), 10, 0.5,
+                        0.5, 0.5);
             }
         }
     }

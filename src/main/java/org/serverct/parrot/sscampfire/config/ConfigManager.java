@@ -94,7 +94,7 @@ public class ConfigManager extends PConfig {
         // 在移除一个 Location 之后要想单独在数据文件里面移除它没有 Key
         ConfigurationSection section = config.createSection("Campfires");
         for (Location loc : this.campfires) {
-            final String key = RandomStringUtils.random(30);
+            final String key = RandomStringUtils.randomAlphanumeric(30);
             if (section.isConfigurationSection(key)) {
                 // FIXME 这里可能有一个 key 重复的问题，我懒得用 while 循环直到不重复了，反正长度 30 的随机字符串，重复概率不大。
             }
