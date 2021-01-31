@@ -7,8 +7,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Nullable;
 import org.serverct.parrot.parrotx.api.ParrotXAPI;
 import org.serverct.parrot.parrotx.config.PConfig;
-import org.serverct.parrot.parrotx.data.autoload.Group;
-import org.serverct.parrot.parrotx.data.autoload.Load;
+import org.serverct.parrot.parrotx.data.autoload.PAutoload;
+import org.serverct.parrot.parrotx.data.autoload.PAutoloadGroup;
 import org.serverct.parrot.parrotx.utils.BasicUtil;
 import org.serverct.parrot.sscampfire.SSCampfire;
 
@@ -17,23 +17,23 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-@Group(path = "Settings")
+@PAutoloadGroup("Settings")
 public class ConfigManager extends PConfig {
 
     private static ConfigManager instance;
     @Getter
     private final List<Location> campfires = new ArrayList<>();
     private final List<String> sentences = new ArrayList<>();
-    @Load(path = "Regen")
+    @PAutoload("Regen")
     private String range;
-    @Load(path = "MaxRegen")
+    @PAutoload("MaxRegen")
     private double maxRegen;
-    @Load(path = "Distance")
+    @PAutoload("Distance")
     private double radius;
-    @Load(path = "Cycle")
+    @PAutoload("Cycle")
     private double cycle;
     @Getter
-    @Load(path = "Cooldown")
+    @PAutoload("Cooldown")
     private double cooldown;
 
     private double min;

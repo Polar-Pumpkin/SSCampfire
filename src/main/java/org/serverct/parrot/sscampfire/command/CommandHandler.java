@@ -5,10 +5,10 @@ import org.serverct.parrot.parrotx.command.subcommands.DebugCommand;
 import org.serverct.parrot.parrotx.command.subcommands.HelpCommand;
 import org.serverct.parrot.parrotx.command.subcommands.ReloadCommand;
 import org.serverct.parrot.parrotx.command.subcommands.VersionCommand;
-import org.serverct.parrot.parrotx.data.autoload.Autoload;
+import org.serverct.parrot.parrotx.data.autoload.PAutoload;
 import org.serverct.parrot.sscampfire.SSCampfire;
 
-@Autoload
+@PAutoload
 public class CommandHandler extends org.serverct.parrot.parrotx.command.CommandHandler {
     public CommandHandler() {
         super(ParrotXAPI.getPlugin(SSCampfire.class), "sscampfire");

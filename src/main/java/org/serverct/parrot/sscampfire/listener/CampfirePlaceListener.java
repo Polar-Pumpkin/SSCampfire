@@ -9,13 +9,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.serverct.parrot.parrotx.data.autoload.Autoload;
+import org.serverct.parrot.parrotx.data.autoload.PAutoload;
 import org.serverct.parrot.parrotx.utils.BasicUtil;
 import org.serverct.parrot.sscampfire.config.ConfigManager;
 
 import java.util.Objects;
 
-@Autoload
+@PAutoload
 public class CampfirePlaceListener implements Listener {
 
     @EventHandler

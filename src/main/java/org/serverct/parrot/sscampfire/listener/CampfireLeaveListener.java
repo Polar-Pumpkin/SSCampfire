@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.serverct.parrot.parrotx.data.autoload.Autoload;
+import org.serverct.parrot.parrotx.data.autoload.PAutoload;
 import org.serverct.parrot.parrotx.utils.BasicUtil;
 import org.serverct.parrot.sscampfire.config.ConfigManager;
 import org.serverct.parrot.sscampfire.utils.MessageUtil;
@@ -13,7 +13,7 @@ import org.serverct.parrot.sscampfire.utils.MessageUtil;
 import java.util.Objects;
 import java.util.UUID;
 
-@Autoload
+@PAutoload
 public class CampfireLeaveListener implements Listener {
 
     @EventHandler
